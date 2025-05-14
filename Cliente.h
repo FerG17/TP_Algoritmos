@@ -168,9 +168,6 @@ public:
             cout << "Puntos de lealtad: " << puntosLealtad << endl;
             mostrarDetalles(nivel + 1);
         }
-        else if (nivel == 6) {
-            cout << "Cantidad de compras: " << historialCompras.tamaño() << endl;
-        }
     }
     void sumarPuntos(int puntos) {
         puntosLealtad += puntos;
