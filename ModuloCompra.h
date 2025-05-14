@@ -168,6 +168,12 @@ public:
             cout << "4. Ver puntos de lealtad";
 
             gotoxy(45, y++);
+            cout << "5. Ver detalles del cliente";
+
+            gotoxy(45, y++);
+            cout << "6. Imprimir entradas compradas";
+
+            gotoxy(45, y++);
             cout << "0. Volver al menu principal";
 
             gotoxy(45, y + 2);
@@ -187,6 +193,19 @@ public:
             case 4:
                 mostrarPuntos();
                 break;
+            case 5:
+                limpiarYCentrarPantalla();
+                cliente.mostrarDetalles(); 
+                pausarContinuar();
+                break;
+            case 6:
+                limpiarYCentrarPantalla();
+                for (size_t i = 0; i < compra.getCantidadEntradas(); i++) {
+                    Entrada e = compra.getEntradas().obtener(i);
+                    e.imprimirEntrada(); 
+                }
+                pausarContinuar();
+                break;
             case 0:
                 gotoxy(45, y + 4);
                 cout << "Volviendo al menu principal...";
@@ -202,3 +221,4 @@ public:
         } while (opcion != 0);
     }
 };
+
