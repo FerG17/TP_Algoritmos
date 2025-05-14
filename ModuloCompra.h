@@ -39,6 +39,14 @@ private:
         cout << "Email: ";
         getline(cin, email);
 
+        while (!cliente.validarEmail(email)) {
+            setColor(ROJO_CLARO, COLOR_FONDO);
+            gotoxy(45, y++);
+            cout << "Email invalido. Ingrese un correo valido: ";
+            setColor(COLOR_TEXTO, COLOR_FONDO);
+            getline(cin, email);
+        }
+
         gotoxy(45, y++);
         cout << "Telefono: ";
         getline(cin, telefono);
@@ -221,4 +229,3 @@ public:
         } while (opcion != 0);
     }
 };
-
