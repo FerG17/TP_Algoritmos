@@ -57,6 +57,18 @@ private:
 
         cliente = Cliente(id, nombre, apellido, email, telefono, direccion);
 
+        ofstream archivoClientes("clientes.txt", ios::app);
+        if (archivoClientes.is_open()) {
+            cliente.guardarEnArchivo(archivoClientes);
+            archivoClientes.close();
+        }
+        else {
+            gotoxy(45, y++);
+            setColor(ROJO_CLARO, COLOR_FONDO);
+            cout << "Error al guardar cliente en archivo.";
+            setColor(COLOR_TEXTO, COLOR_FONDO);
+        }
+
         gotoxy(45, y + 1);
         setColor(VERDE_CLARO, COLOR_FONDO);
         cout << "Cliente registrado exitosamente.";
