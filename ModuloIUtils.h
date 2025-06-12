@@ -38,10 +38,8 @@ void pausarContinuar() {
     cursorInfo.dwSize = 100;
     cursorInfo.bVisible = TRUE;
     SetConsoleCursorInfo(hConsole, &cursorInfo);
-
     getch();  
     cursorInfo.bVisible = FALSE;
     SetConsoleCursorInfo(hConsole, &cursorInfo);
-
     limpiarYCentrarPantalla();
 }
