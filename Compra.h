@@ -131,13 +131,13 @@ public:
             Entrada e = entradas.obtener(i);
             e.marcarUtilizada();
             entradas.modificar(i, e);
-            colaValidacion.encolar(e);
+            colaValidacion.enqueue(e);
         }
     }
     void validarEntradas() {
         cout << "\n=== VALIDANDO ENTRADAS ===\n";
         while (!colaValidacion.esVacia()) {
-            Entrada e = colaValidacion.desencolar();
+            Entrada e = colaValidacion.dequeue();
             if (e.validar()) {
                 cout << "Entrada " << e.getCodigo() << " validada correctamente.\n";
             }
@@ -183,7 +183,5 @@ public:
         return os;
     }
 };
-
 int Compra::contadorIds = 0;
-
 #endif
