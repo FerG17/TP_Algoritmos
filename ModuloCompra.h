@@ -20,7 +20,7 @@ private:
         limpiarYCentrarPantalla();
         mostrarTituloModulo("REGISTRO DE CLIENTE");
 
-        int y = 18; 
+        int y = 18;
 
         gotoxy(45, y++);
         cout << "Ingrese ID (DNI): ";
@@ -74,7 +74,7 @@ private:
         cout << "Cliente registrado exitosamente.";
         setColor(COLOR_TEXTO, COLOR_FONDO);
 
-        Sleep(1500); 
+        Sleep(1500);
     }
 
     void agregarEvento() {
@@ -109,14 +109,14 @@ private:
         cout << "Evento agregado a la compra. Puntos actuales: " << cliente.getPuntosLealtad();
         setColor(COLOR_TEXTO, COLOR_FONDO);
 
-        Sleep(1500); 
+        Sleep(1500);
     }
 
     void mostrarCompra() {
         limpiarYCentrarPantalla();
         mostrarTituloModulo("RESUMEN DE COMPRA");
 
-        int y = 18; 
+        int y = 18;
 
         if (compra.getCantidadEntradas() == 0) {
             gotoxy(45, y++);
@@ -136,7 +136,7 @@ private:
         limpiarYCentrarPantalla();
         mostrarTituloModulo("CONSULTA DE PRECIOS");
 
-        int y = 18; 
+        int y = 18;
 
         gotoxy(45, y++);
         cout << "Subtotal sin descuento: S/. " << compra.calcularSubtotal();
@@ -151,7 +151,7 @@ private:
         limpiarYCentrarPantalla();
         mostrarTituloModulo("PUNTOS DE LEALTAD");
 
-        int y = 18; 
+        int y = 18;
 
         int puntos = cliente.getPuntosLealtad();
 
@@ -173,7 +173,7 @@ public:
             limpiarYCentrarPantalla();
             mostrarTituloModulo("MODULO COMPRA");
 
-            int y = 18; 
+            int y = 18;
 
             gotoxy(45, y++);
             cout << "1. Registrarse en evento";
@@ -215,14 +215,14 @@ public:
                 break;
             case 5:
                 limpiarYCentrarPantalla();
-                cliente.mostrarDetalles(); 
+                cliente.mostrarDetalles();
                 pausarContinuar();
                 break;
             case 6:
                 limpiarYCentrarPantalla();
                 for (size_t i = 0; i < compra.getCantidadEntradas(); i++) {
                     Entrada e = compra.getEntradas().obtener(i);
-                    e.imprimirEntrada(); 
+                    e.imprimirEntrada();
                 }
                 pausarContinuar();
                 break;
