@@ -115,9 +115,7 @@ private:
     void mostrarCompra() {
         limpiarYCentrarPantalla();
         mostrarTituloModulo("RESUMEN DE COMPRA");
-
         int y = 18;
-
         if (compra.getCantidadEntradas() == 0) {
             gotoxy(45, y++);
             setColor(ROJO_CLARO, COLOR_FONDO);
@@ -126,11 +124,14 @@ private:
             Sleep(1500);
             return;
         }
-
+        compra.getEntradas().ordenarQuick([](const Entrada& a, const Entrada& b) {
+            return a.getPrecio() < b.getPrecio();
+            });
         gotoxy(45, y);
         compra.mostrarResumen();
         pausarContinuar();
     }
+
 
     void consultarPrecios() {
         limpiarYCentrarPantalla();
@@ -220,6 +221,9 @@ public:
                 break;
             case 6:
                 limpiarYCentrarPantalla();
+                compra.getEntradas().ordenarQuick([](const Entrada& a, const Entrada& b) {
+                    return a.getPrecio() < b.getPrecio();
+                    });
                 for (size_t i = 0; i < compra.getCantidadEntradas(); i++) {
                     Entrada e = compra.getEntradas().obtener(i);
                     e.imprimirEntrada();
