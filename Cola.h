@@ -20,8 +20,8 @@ public:
     }
 
     ~Cola();
-    void encolar(T v);
-    T desencolar();
+    void enqueue(T v);
+    T dequeue();
     T frente() const;
     bool esVacia() const;
     size_t longitud() const;
@@ -39,7 +39,7 @@ Cola<T>::~Cola() {
 }
 
 template<class T>
-void Cola<T>::encolar(T v) {
+void Cola<T>::enqueue(T v) {
     Nodo<T>* nuevo = new Nodo<T>(v);
 
     if (esVacia()) {
@@ -54,7 +54,7 @@ void Cola<T>::encolar(T v) {
     tamanio++;
 }
 template<class T>
-T Cola<T>::desencolar() {
+T Cola<T>::dequeue() {
     if (esVacia()) {
         cerr << "Error: cola vacia" << endl;
         return T();
@@ -113,15 +113,15 @@ T Cola<T>::buscar(function<bool(T)> condicion) {
     T encontrado = T();
     bool hallado = false;
     while (!esVacia()) {
-        T elemento = desencolar();
+        T elemento = dequeue();
         if (condicion(elemento) && !hallado) {
             encontrado = elemento;
             hallado = true;
         }
-        temp.encolar(elemento);
+        temp.enqueue(elemento);
     }
     while (!temp.esVacia()) {
-        encolar(temp.desencolar());
+        enqueue(temp.dequeue());
     }
 
     return encontrado;
@@ -133,15 +133,15 @@ Cola<T> Cola<T>::filtrar(function<bool(T)> condicion) {
     Cola<T> temp;
 
     while (!esVacia()) {
-        T elemento = desencolar();
-        temp.encolar(elemento);
+        T elemento = dequeue();
+        temp.enqueue(elemento);
 
         if (condicion(elemento)) {
-            resultado.encolar(elemento);
+            resultado.enqueue(elemento);
         }
     }
     while (!temp.esVacia()) {
-        encolar(temp.desencolar());
+        enqueue(temp.dequeue());
     }
 
     return resultado;
@@ -150,12 +150,12 @@ template<class T>
 void Cola<T>::forEach(function<void(T&)> accion) {
     Cola<T> temp;
     while (!esVacia()) {
-        T elemento = desencolar();
+        T elemento = dequeue();
         accion(elemento);
-        temp.encolar(elemento);
+        temp.enqueue(elemento);
     }
     while (!temp.esVacia()) {
-        encolar(temp.desencolar());
+        enqueue(temp.dequeue());
     }
 }
 template<class T>
@@ -169,8 +169,8 @@ void Cola<T>::mostrar(function<void(T)> mostrarElemento) {
     cout << "Cola (inicio -> fin): ";
 
     while (!esVacia()) {
-        T elemento = desencolar();
-        temp.encolar(elemento);
+        T elemento = dequeue();
+        temp.enqueue(elemento);
 
         if (mostrarElemento) {
             mostrarElemento(elemento);
@@ -185,7 +185,7 @@ void Cola<T>::mostrar(function<void(T)> mostrarElemento) {
     }
     cout << endl;
     while (!temp.esVacia()) {
-        encolar(temp.desencolar());
+        enqueue(temp.dequeue());
     }
 }
 #endif
