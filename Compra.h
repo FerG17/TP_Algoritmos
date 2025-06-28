@@ -187,3 +187,5 @@ public:
 int Compra::contadorIds = 0;
 
 #endif
+
+#endif
