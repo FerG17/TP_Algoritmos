@@ -37,45 +37,43 @@ template<class T>
 Cola<T>::~Cola() {
     vaciar();
 }
-
+//ANALISIS 4
 template<class T>
 void Cola<T>::enqueue(T v) {
-    Nodo<T>* nuevo = new Nodo<T>(v);
-
-    if (esVacia()) {
-        inicio = nuevo;
-        fin = nuevo;
+    Nodo<T>* nuevo = new Nodo<T>(v); //1
+    if (esVacia()) {//1
+        inicio = nuevo;//1
+        fin = nuevo;//1
     }
-    else {
-        fin->siguiente = nuevo;
-        fin = nuevo;
+    else {//1
+        fin->siguiente = nuevo;//1
+        fin = nuevo;//1
     }
+    tamanio++;//1
+} // O(1)
 
-    tamanio++;
-}
+
+//ANALISIS 5 
 template<class T>
 T Cola<T>::dequeue() {
-    if (esVacia()) {
-        cerr << "Error: cola vacia" << endl;
+    if (esVacia()) {//1
+        cerr << "Error: cola vacia" << endl;//2
         return T();
     }
-
-    T elemento = inicio->valor;
-    Nodo<T>* temp = inicio;
-
-    if (inicio == fin) {
-        inicio = nullptr;
-        fin = nullptr;
+    T elemento = inicio->valor;//1
+    Nodo<T>* temp = inicio;//1
+    if (inicio == fin) {//1
+        inicio = nullptr;//1
+        fin = nullptr;//1
     }
-    else {
-        inicio = inicio->siguiente;
+    else {//1
+        inicio = inicio->siguiente;//!
     }
-
     delete temp;
-    tamanio--;
-
+    tamanio--;//1
     return elemento;
-}
+} //11 = O(1)
+
 
 template<class T>
 T Cola<T>::frente() const {
@@ -164,21 +162,17 @@ void Cola<T>::mostrar(function<void(T)> mostrarElemento) {
         cout << "Cola vacia" << endl;
         return;
     }
-
     Cola<T> temp;
     cout << "Cola (inicio -> fin): ";
-
     while (!esVacia()) {
         T elemento = dequeue();
         temp.enqueue(elemento);
-
         if (mostrarElemento) {
             mostrarElemento(elemento);
         }
         else {
             cout << elemento;
         }
-
         if (!esVacia()) {
             cout << " -> ";
         }
