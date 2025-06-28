@@ -183,5 +183,7 @@ public:
         return os;
     }
 };
+
 int Compra::contadorIds = 0;
+
 #endif
