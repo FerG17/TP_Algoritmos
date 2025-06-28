@@ -10,15 +10,18 @@ private:
     string comentario;
     int calificacion;
     string nombreCliente;
+
 public:
     ReseñaEvento() : id(0), comentario(""), calificacion(0), nombreCliente("") {}
     ReseñaEvento(int id, string com, int cal, string nom)
         : id(id), comentario(com), calificacion(cal), nombreCliente(nom) {
     }
+
     int getId() const { return id; }
     string getComentario() const { return comentario; }
     int getCalificacion() const { return calificacion; }
     string getNombreCliente() const { return nombreCliente; }
+
     void setComentario(string c) { comentario = c; }
     void setCalificacion(int cal) { calificacion = cal; }
     void setNombreCliente(string n) { nombreCliente = n; }
