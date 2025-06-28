@@ -1,4 +1,4 @@
-#pragma once
+ragma once
 #include <iostream>
 #include <string>
 #include <conio.h> 
@@ -13,6 +13,8 @@ private:
     Cliente cliente;
     Compra compra;
 
+    //ANALISIS 6
+
     void registrarCliente() {
         int id;
         string nombre, apellido, email, telefono, direccion;
@@ -20,62 +22,62 @@ private:
         limpiarYCentrarPantalla();
         mostrarTituloModulo("REGISTRO DE CLIENTE");
 
-        int y = 18;
+        int y = 18;//1
 
         gotoxy(45, y++);
-        cout << "Ingrese ID (DNI): ";
-        cin >> id;
+        cout << "Ingrese ID (DNI): ";//1
+        cin >> id;//1
         cin.ignore();
 
-        gotoxy(45, y++);
-        cout << "Nombre: ";
-        getline(cin, nombre);
+        gotoxy(45, y++);//1
+        cout << "Nombre: ";//1
+        getline(cin, nombre);//1
 
-        gotoxy(45, y++);
-        cout << "Apellido: ";
-        getline(cin, apellido);
+        gotoxy(45, y++);//1
+        cout << "Apellido: ";//1
+        getline(cin, apellido);//1
 
-        gotoxy(45, y++);
-        cout << "Email: ";
-        getline(cin, email);
+        gotoxy(45, y++);//1
+        cout << "Email: ";//1
+        getline(cin, email);//1
 
-        while (!cliente.validarEmail(email)) {
+        while (!cliente.validarEmail(email)) {//n
             setColor(ROJO_CLARO, COLOR_FONDO);
-            gotoxy(45, y++);
-            cout << "Email invalido. Ingrese un correo valido: ";
+            gotoxy(45, y++);//1
+            cout << "Email invalido. Ingrese un correo valido: ";//1
             setColor(COLOR_TEXTO, COLOR_FONDO);
-            getline(cin, email);
+            getline(cin, email);//1
         }
 
-        gotoxy(45, y++);
-        cout << "Telefono: ";
-        getline(cin, telefono);
+        gotoxy(45, y++);//1
+        cout << "Telefono: ";//1
+        getline(cin, telefono);//1
 
-        gotoxy(45, y++);
-        cout << "Direccion: ";
-        getline(cin, direccion);
+        gotoxy(45, y++);//1
+        cout << "Direccion: ";//1
+        getline(cin, direccion);//1
 
-        cliente = Cliente(id, nombre, apellido, email, telefono, direccion);
+        cliente = Cliente(id, nombre, apellido, email, telefono, direccion);//1
 
         ofstream archivoClientes("clientes.txt", ios::app);
-        if (archivoClientes.is_open()) {
+        if (archivoClientes.is_open()) {//1
             cliente.guardarEnArchivo(archivoClientes);
             archivoClientes.close();
         }
-        else {
-            gotoxy(45, y++);
+        else {//1
+            gotoxy(45, y++);//1
             setColor(ROJO_CLARO, COLOR_FONDO);
-            cout << "Error al guardar cliente en archivo.";
+            cout << "Error al guardar cliente en archivo.";//1
             setColor(COLOR_TEXTO, COLOR_FONDO);
         }
 
-        gotoxy(45, y + 1);
+        gotoxy(45, y + 1);//1
         setColor(VERDE_CLARO, COLOR_FONDO);
-        cout << "Cliente registrado exitosamente.";
+        cout << "Cliente registrado exitosamente.";//1
         setColor(COLOR_TEXTO, COLOR_FONDO);
 
         Sleep(1500);
-    }
+    } //n+28 = O(n)
 
     void agregarEvento() {
         int eventoId, asientoId;
@@ -245,3 +247,4 @@ public:
         } while (opcion != 0);
     }
 };
+
