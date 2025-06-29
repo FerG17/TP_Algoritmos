@@ -1,4 +1,4 @@
-ragma once
+#pragma once
 #include <iostream>
 #include <string>
 #include <conio.h> 
@@ -12,6 +12,7 @@ class ModuloCompra {
 private:
     Cliente cliente;
     Compra compra;
+    GestorEventos* gestorEventos;
 
     //ANALISIS 6
 
@@ -80,35 +81,47 @@ private:
     } //n+28 = O(n)
 
     void agregarEvento() {
-        int eventoId, asientoId;
-        double precio;
-
         limpiarYCentrarPantalla();
-        gotoxy(45, 18);
-        mostrarTituloModulo("AGREGAR EVENTO");
+        mostrarTituloModulo("SELECCIONAR EVENTO");
 
-        int y = 19;
+        int y = 20;
+        auto& eventos = gestorEventos->getEventos();
+        if (eventos.tamaño() == 0) {
+            gotoxy(45, y++); std::cout << "No hay eventos disponibles.";
+            pausarContinuar();
+            return;
+        }
+        for (size_t i = 0; i < eventos.tamaño(); ++i) {
+            gotoxy(45, y++);
+            std::cout << i + 1 << ". ";
+            eventos.obtener(i)->mostrar();
+        }
+        int seleccion;
+        gotoxy(45, y + 1); std::cout << "Seleccione el evento (numero): ";
+        std::cin >> seleccion;
 
-        gotoxy(45, y++);
-        cout << "Ingrese ID del evento: ";
-        cin >> eventoId;
+        if (seleccion < 1 || seleccion > eventos.tamaño()) {
+            gotoxy(45, y + 3); std::cout << "Opcion invalida.";
+            pausarContinuar();
+            return;
+        }
 
-        gotoxy(45, y++);
-        cout << "Ingrese ID del asiento: ";
-        cin >> asientoId;
+        Evento* eventoSeleccionado = eventos.obtener(seleccion - 1);
 
-        gotoxy(45, y++);
-        cout << "Ingrese precio del evento: ";
-        cin >> precio;
+        gotoxy(45, y + 4); std::cout << "Precio del evento: S/. " << eventoSeleccionado->getPrecio();
 
-        Entrada entrada(eventoId, asientoId, precio);
+        int asientoId;
+        gotoxy(45, y + 5); std::cout << "Ingrese ID del asiento: ";
+        std::cin >> asientoId;
+
+        // Usa el precio del evento directamente
+        Entrada entrada(eventoSeleccionado->getId(), asientoId, eventoSeleccionado->getPrecio());
         compra.agregarEntrada(entrada);
-
         cliente.sumarPuntos(20);
 
-        gotoxy(45, y + 1);
+        gotoxy(45, y + 6);
         setColor(VERDE_CLARO, COLOR_FONDO);
-        cout << "Evento agregado a la compra. Puntos actuales: " << cliente.getPuntosLealtad();
+        std::cout << "Evento agregado a la compra. Puntos actuales: " << cliente.getPuntosLealtad();
         setColor(COLOR_TEXTO, COLOR_FONDO);
 
         Sleep(1500);
@@ -168,6 +181,9 @@ private:
     }
 
 public:
+
+    ModuloCompra(GestorEventos* gestor) : gestorEventos(gestor) {}
+
     void ejecutar() {
         int opcion;
         registrarCliente();
@@ -247,4 +263,3 @@ public:
         } while (opcion != 0);
     }
 };
-
