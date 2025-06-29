@@ -43,6 +43,33 @@ private:
         cin.ignore();
         cin.get();
     }
+
+    void heapify(DescuentoPromocion* arr, int n, int i, function<bool(const DescuentoPromocion&, const DescuentoPromocion&)> comp) {
+        int largest = i; // El más "grande" según el comparador
+        int l = 2 * i + 1;
+        int r = 2 * i + 2;
+
+        if (l < n && comp(arr[largest], arr[l]))
+            largest = l;
+        if (r < n && comp(arr[largest], arr[r]))
+            largest = r;
+        if (largest != i) {
+            swap(arr[i], arr[largest]);
+            heapify(arr, n, largest, comp);
+        }
+    }
+
+    void heapsort(DescuentoPromocion* arr, int n, function<bool(const DescuentoPromocion&, const DescuentoPromocion&)> comp) {
+        // Construir heap
+        for (int i = n / 2 - 1; i >= 0; i--)
+            heapify(arr, n, i, comp);
+        // Extraer elementos del heap uno a uno
+        for (int i = n - 1; i >= 0; i--) {
+            swap(arr[0], arr[i]);
+            heapify(arr, i, 0, comp);
+        }
+    }
+
     void menuDescuentos() {
         int opcion;
         do {
@@ -51,6 +78,7 @@ private:
             cout << "2. Filtrar por descuentos vigentes\n";
             cout << "3. Buscar descuentos con porcentaje minimo\n";
             cout << "4. Aumentar porcentaje a descuentos vigentes\n";
+            cout << "5. Mostrar descuentos ordenados por porcentaje (heapsort)\n";
             cout << "0. Volver al menu anterior\n";
             cout << "Seleccione una opcion: ";
             cin >> opcion;
@@ -84,7 +112,7 @@ private:
                 DescuentoPromocion::filtrarMostrar(descuentos, 5, superaMinimo);
                 break;
             }
-            case 4: {
+			case 4: {
                 float incremento;
                 cout << "Ingrese el incremento para los descuentos vigentes: ";
                 cin >> incremento;
@@ -105,6 +133,16 @@ private:
                 for (int i = 0; i < 5; i++) {
                     descuentos[i].mostrar();
                 }
+                break;
+            }
+            case 5: { 
+                cout << "\n=== DESCUENTOS ORDENADOS POR PORCENTAJE (HEAPSORT) ===\n";
+                DescuentoPromocion temp[5];
+                for (int i = 0; i < 5; i++) temp[i] = descuentos[i];
+                heapsort(temp, 5, [](const DescuentoPromocion& a, const DescuentoPromocion& b) {
+                    return a.getPorcentaje() < b.getPorcentaje(); 
+                    });
+                for (int i = 0; i < 5; i++) temp[i].mostrar();
                 break;
             }
             case 0:
@@ -401,4 +439,3 @@ public:
         } while (opcion != 0);
     }
 };
-
