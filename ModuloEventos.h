@@ -17,13 +17,12 @@ private:
 
 public:
     ModuloEventos() : lugar("Estadio Nacional") {}
-
     void cargarEventosDeEjemplo() {
-        Evento* e1 = new Concierto("RockFest", "2025-06-10", 150, "Los Riffs");
-        Evento* e2 = new Concierto("MetalVibe", "2025-07-01", 200, "Iron Scream");
-        Evento* e3 = new ObraTeatral("Hamlet", "2025-08-15", 90, "Juan Perez", 120);
-        Evento* e4 = new Festival("Book Fest", "2025-06-07", 50, 2, "Libros");
-        Evento* e5 = new Deporte("El Clasico", "2025-08-12", 70, "Universitario", "Alianza Lima");
+        Evento* e1 = new Concierto(1, "RockFest", "2025-06-10", 150, "Los Riffs");
+        Evento* e2 = new Concierto(2, "MetalVibe", "2025-07-01", 200, "Iron Scream");
+        Evento* e3 = new ObraTeatral(3, "Hamlet", "2025-08-15", 90, "Juan Perez", 120);
+        Evento* e4 = new Festival(4, "Book Fest", "2025-06-07", 50, 2, "Libros");
+        Evento* e5 = new Deporte(5, "El Clasico", "2025-08-12", 70, "Universitario", "Alianza Lima");
         gestor.agregarEvento(e1);
         gestor.agregarEvento(e2);
         gestor.agregarEvento(e3);
@@ -31,7 +30,6 @@ public:
         gestor.agregarEvento(e5);
 
     }
-
     void ejecutar() {
         cargarEventosDeEjemplo();
 
@@ -174,6 +172,5 @@ public:
 
         } while (opcion != 0);
     }
-
-
+    GestorEventos* getGestorEventosPtr() { return &gestor; }
 };
