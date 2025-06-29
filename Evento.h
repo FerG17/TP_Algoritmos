@@ -6,22 +6,22 @@ using namespace std;
 
 class Evento {
 protected:
-
+    int id;
     string nombre, fecha;
     double precio;
     SeccionLugar* seccion;
     SeccionLugar* seccionGeneral;
     SeccionLugar* seccionVIP;
 public:
-    Evento(string n, string f, double p)
-        : nombre(n), fecha(f), precio(p),
+    Evento(int _id, string n, string f, double p)
+        : id(_id), nombre(n), fecha(f), precio(p),
         seccion(new SeccionLugar("Principal")),
         seccionGeneral(new SeccionLugar("General")),
         seccionVIP(new SeccionLugar("VIP Gold")) {
     }
 
     virtual void mostrar() {
-        cout << "Evento: " << nombre << ", Fecha: " << fecha << ", Precio: " << precio << endl;
+        cout << "Evento: " << nombre << "Id:  " << id << ", Fecha: " << fecha << ", Precio : " << precio << endl;
     }
     virtual void mostrarSeccion() {
         seccionGeneral = new SeccionLugar("General");
@@ -40,4 +40,5 @@ public:
         delete seccionGeneral;
         delete seccionVIP;
     }
+    int getId() const { return id; }
 };
