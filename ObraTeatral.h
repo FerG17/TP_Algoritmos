@@ -7,8 +7,8 @@ private:
     int duracionMin;
 
 public:
-    ObraTeatral(string nombre, string fecha, double precio, string director, int duracion)
-        : Evento(nombre, fecha, precio), director(director), duracionMin(duracion) {
+    ObraTeatral(int _id, string nombre, string fecha, double precio, string director, int duracion)
+        : Evento(_id, nombre, fecha, precio), director(director), duracionMin(duracion) {
     }
 
     void mostrar() override {
