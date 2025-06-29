@@ -7,8 +7,8 @@ private:
     string equipoVisitante;
 
 public:
-    Deporte(string nombre, string fecha, double precio, string local, string visitante)
-        : Evento(nombre, fecha, precio), equipoLocal(local), equipoVisitante(visitante) {
+    Deporte(int _id, string nombre, string fecha, double precio, string local, string visitante)
+        : Evento(_id, nombre, fecha, precio), equipoLocal(local), equipoVisitante(visitante) {
     }
 
     void mostrar() override {
