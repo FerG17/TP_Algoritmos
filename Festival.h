@@ -7,8 +7,8 @@ private:
     string categoria;
 
 public:
-    Festival(string nombre, string fecha, double precio, int dias, string cat)
-        : Evento(nombre, fecha, precio), diasDuracion(dias), categoria(cat) {
+    Festival(int _id, string nombre, string fecha, double precio, int dias, string cat)
+        : Evento(_id, nombre, fecha, precio), diasDuracion(dias), categoria(cat) {
     }
 
     void mostrar() override {
