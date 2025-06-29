@@ -5,7 +5,7 @@
 class Concierto : public Evento {
     string artista;
 public:
-    Concierto(string n, string f, double p, string art) : Evento(n, f, p), artista(art) {}
+    Concierto(int _id, string n, string f, double p, string art) : Evento(_id, n, f, p), artista(art) {}
     void mostrar() override {
         cout << "" << endl;
         cout << "\n   |   CONCIERTO: " << nombre << endl;
