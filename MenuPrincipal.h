@@ -24,7 +24,7 @@ void MenuPrincipal::iniciar() {
     int opcion;
     ModuloEventos moduloEventos;
     ModuloServiciosAdmin moduloServiciosAdmin;
-    ModuloCompra moduloCompra;
+    ModuloCompra moduloCompra(moduloEventos.getGestorEventosPtr());
     bool primeraVez = true;
 
     do {
