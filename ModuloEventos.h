@@ -10,6 +10,7 @@
 #include "Evento.h"
 #include "Lugar.h"
 #include "ModuloUtils.h"
+
 class ModuloEventos {
 private:
     Lugar lugar;
@@ -36,7 +37,7 @@ public:
         int opcion;
         int opcionA;
         do {
-            limpiarYCentrarPantalla(); 
+            limpiarYCentrarPantalla();
             mostrarTituloModulo("MODULO EVENTOS");
 
             int y = 50;
@@ -45,7 +46,8 @@ public:
             gotoxy(45, y++); cout << "3. Mostrar historial";
             gotoxy(45, y++); cout << "4. Ver eventos y asientos del lugar";
             gotoxy(45, y++); cout << "5. Ver asientos en orden inverso";
-            gotoxy(45, y++); cout << "6. Ver eventos ordenados por precio"; // NUEVA OPCION
+            gotoxy(45, y++); cout << "6. Ver eventos ordenados por precio"; 
+            gotoxy(45, y++); cout << "7. Buscar evento por ID (HashTable)";
             gotoxy(45, y++); cout << "0. Volver al menu principal";
             gotoxy(45, y++); cout << "Opcion: ";
             gotoxy(53, y - 1); cin >> opcion;
@@ -161,9 +163,9 @@ public:
                 pausarContinuar();
                 break;
             }
-			case 6: {
+            case 6: {
                 limpiarYCentrarPantalla();
-                gotoxy(45, 28); std::cout << "EVENTOS ORDENADOS POR PRECIO";
+                gotoxy(45, 28); cout << "EVENTOS ORDENADOS POR PRECIO";
                 gestor.getEventos().ordenarMerge([](Evento* a, Evento* b) {
                     return a->getPrecio() < b->getPrecio();
                     });
@@ -174,7 +176,25 @@ public:
                     });
                 pausarContinuar();
                 break;
-			}
+            }
+            case 7: {
+                limpiarYCentrarPantalla();
+                int idBuscado;
+                gotoxy(45, 30); cout << "Ingrese el ID del evento a buscar: ";
+                cin >> idBuscado;
+                Evento* e = gestor.buscarPorId(idBuscado);
+                limpiarYCentrarPantalla();
+                if (e) {
+                    gotoxy(45, 30); cout << "Evento encontrado por ID:";
+                    gotoxy(45, 31); e->mostrar();
+                    gestor.historialPush(e);
+                }
+                else {
+                    gotoxy(45, 30); cout << "No se encontro ningun evento con ese ID.";
+                }
+                pausarContinuar();
+                break;
+            }
             case 0:
                 gotoxy(45, 30); cout << "Saliendo del modulo eventos...";
                 break;
