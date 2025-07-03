@@ -178,7 +178,4 @@ public:
         return os;
     }
 };
-
-#endif
-
 #endif
