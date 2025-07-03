@@ -43,9 +43,10 @@ private:
         cin.ignore();
         cin.get();
     }
+    //ORDENAMIENTO AVANZADO HEAPSORT
 
     void heapify(DescuentoPromocion* arr, int n, int i, function<bool(const DescuentoPromocion&, const DescuentoPromocion&)> comp) {
-        int largest = i; // El más "grande" según el comparador
+        int largest = i; 
         int l = 2 * i + 1;
         int r = 2 * i + 2;
 
@@ -60,10 +61,8 @@ private:
     }
 
     void heapsort(DescuentoPromocion* arr, int n, function<bool(const DescuentoPromocion&, const DescuentoPromocion&)> comp) {
-        // Construir heap
         for (int i = n / 2 - 1; i >= 0; i--)
             heapify(arr, n, i, comp);
-        // Extraer elementos del heap uno a uno
         for (int i = n - 1; i >= 0; i--) {
             swap(arr[0], arr[i]);
             heapify(arr, i, 0, comp);
@@ -112,7 +111,7 @@ private:
                 DescuentoPromocion::filtrarMostrar(descuentos, 5, superaMinimo);
                 break;
             }
-			case 4: {
+            case 4: {
                 float incremento;
                 cout << "Ingrese el incremento para los descuentos vigentes: ";
                 cin >> incremento;
@@ -135,12 +134,12 @@ private:
                 }
                 break;
             }
-            case 5: { 
+            case 5: {
                 cout << "\n=== DESCUENTOS ORDENADOS POR PORCENTAJE (HEAPSORT) ===\n";
                 DescuentoPromocion temp[5];
                 for (int i = 0; i < 5; i++) temp[i] = descuentos[i];
                 heapsort(temp, 5, [](const DescuentoPromocion& a, const DescuentoPromocion& b) {
-                    return a.getPorcentaje() < b.getPorcentaje(); 
+                    return a.getPorcentaje() < b.getPorcentaje();
                     });
                 for (int i = 0; i < 5; i++) temp[i].mostrar();
                 break;
@@ -161,9 +160,9 @@ private:
     void menuResenas() {
         int opcion;
         do {
-            cout << "\n==== MENU DE RESE"<<char(165)<<"AS DE EVENTOS ====\n";
-            cout << "1. Mostrar todas las rese"<<char(164)<<"as\n";
-            cout << "2. Filtrar rese"<<char(164)<<"as por calificacion minima\n";
+            cout << "\n==== MENU DE RESE" << char(165) << "AS DE EVENTOS ====\n";
+            cout << "1. Mostrar todas las rese" << char(164) << "as\n";
+            cout << "2. Filtrar rese" << char(164) << "as por calificacion minima\n";
             cout << "3. Calcular promedio de calificaciones\n";
             cout << "4. Mejorar comentarios negativos\n";
             cout << "0. Volver al menu anterior\n";
@@ -172,7 +171,7 @@ private:
 
             switch (opcion) {
             case 1: {
-                cout << "\n=== TODAS LAS RESE"<<char(165)<<"AS ===\n";
+                cout << "\n=== TODAS LAS RESE" << char(165) << "AS ===\n";
                 for (int i = 0; i < 4; i++) {
                     resenas[i].mostrar();
                 }
@@ -183,7 +182,7 @@ private:
                 cout << "Ingrese la calificación minima (1-5): ";
                 cin >> minima;
 
-                cout << "\n=== RESE"<<char(165)<<"AS CON CALIFICACION >= " << minima << " ===\n";
+                cout << "\n=== RESE" << char(165) << "AS CON CALIFICACION >= " << minima << " ===\n";
                 // LAMBDA
                 auto calificacionMinima = [minima](const ReseñaEvento& r) {
                     return r.getCalificacion() >= minima;
@@ -242,7 +241,7 @@ private:
 
                 ReseñaEvento::buscarYModificar(resenas, 4, esCalificacionBaja, mejorarComentario);
 
-                cout << "Comentarios actualizados para rese"<<char(164)<<"as con baja calificacion:\n";
+                cout << "Comentarios actualizados para rese" << char(164) << "as con baja calificacion:\n";
                 for (int i = 0; i < 4; i++) {
                     if (resenas[i].getCalificacion() <= 2) {
                         resenas[i].mostrar();
@@ -408,7 +407,7 @@ public:
         do {
             cout << "\n==== MODULO DE FUNCIONES SERVICIOS Y ADMINISTRACION ====\n";
             cout << "1. Gestion de Descuentos y Promociones\n";
-            cout << "2. Analisis de Rese"<<char(164)<<"as de Eventos\n";
+            cout << "2. Analisis de Rese" << char(164) << "as de Eventos\n";
             cout << "3. Administracion de Usuarios\n";
             cout << "0. Volver al menu principal\n";
             cout << "Seleccione una opcion: ";
