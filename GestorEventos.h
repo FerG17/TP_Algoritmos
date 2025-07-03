@@ -31,8 +31,15 @@ void GestorEventos::agregarEvento(Evento* e) {
     eventos.insertarOrdenado(e, [](Evento* a, Evento* b) {
         return a->getFecha() < b->getFecha();
         });
-    int idx = eventos.tamaño() - 1;
-    hashEventos.insertar(e->getId(), idx);
+    int idx = -1;
+    for (int i = 0; i < eventos.tamaño(); ++i) {
+        if (eventos.obtener(i) == e) {
+            idx = i;
+            break;
+        }
+    }
+    if (idx != -1)
+        hashEventos.insertar(e->getId(), idx);
 }
 
 void GestorEventos::mostrarEventos() {
