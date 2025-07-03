@@ -87,41 +87,39 @@ private:
         int y = 20;
         auto& eventos = gestorEventos->getEventos();
         if (eventos.tamaño() == 0) {
-            gotoxy(45, y++); std::cout << "No hay eventos disponibles.";
+            gotoxy(45, y++); cout << "No hay eventos disponibles.";
             pausarContinuar();
             return;
         }
         for (size_t i = 0; i < eventos.tamaño(); ++i) {
             gotoxy(45, y++);
-            std::cout << i + 1 << ". ";
+            cout << i + 1 << ". ";
             eventos.obtener(i)->mostrar();
         }
         int seleccion;
-        gotoxy(45, y + 1); std::cout << "Seleccione el evento (numero): ";
-        std::cin >> seleccion;
+        gotoxy(45, y + 1); cout << "Seleccione el evento (numero): ";
+        cin >> seleccion;
 
         if (seleccion < 1 || seleccion > eventos.tamaño()) {
-            gotoxy(45, y + 3); std::cout << "Opcion invalida.";
+            gotoxy(45, y + 3); cout << "Opcion invalida.";
             pausarContinuar();
             return;
         }
 
         Evento* eventoSeleccionado = eventos.obtener(seleccion - 1);
 
-        gotoxy(45, y + 4); std::cout << "Precio del evento: S/. " << eventoSeleccionado->getPrecio();
+        gotoxy(45, y + 4); cout << "Precio del evento: S/. " << eventoSeleccionado->getPrecio();
 
         int asientoId;
-        gotoxy(45, y + 5); std::cout << "Ingrese ID del asiento: ";
-        std::cin >> asientoId;
-
-        // Usa el precio del evento directamente
+        gotoxy(45, y + 5); cout << "Ingrese ID del asiento: ";
+        cin >> asientoId;
         Entrada entrada(eventoSeleccionado->getId(), asientoId, eventoSeleccionado->getPrecio());
         compra.agregarEntrada(entrada);
         cliente.sumarPuntos(20);
 
         gotoxy(45, y + 6);
         setColor(VERDE_CLARO, COLOR_FONDO);
-        std::cout << "Evento agregado a la compra. Puntos actuales: " << cliente.getPuntosLealtad();
+        cout << "Evento agregado a la compra. Puntos actuales: " << cliente.getPuntosLealtad();
         setColor(COLOR_TEXTO, COLOR_FONDO);
 
         Sleep(1500);
