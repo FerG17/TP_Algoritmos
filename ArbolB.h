@@ -1,173 +1,172 @@
 #pragma once
-//todo agregado
 #include <functional>
 #include <iostream>
 using namespace std;
 
 template <class T>
-class Nodos {
+class NodoArbol {
 public:
     T elemento;
-    Nodos* izq;
-    Nodos* der;
-    Nodos() : elemento(), izq(nullptr), der(nullptr) {}
-    Nodos(T elem) : elemento(elem), izq(nullptr), der(nullptr) {}
+    NodoArbol<T>* izq;
+    NodoArbol<T>* der;
+    NodoArbol() : elemento(), izq(nullptr), der(nullptr) {}
+    NodoArbol(T elem) : elemento(elem), izq(nullptr), der(nullptr) {}
 };
 
 template <class T>
 class ArbolB {
-    typedef function<int(T, T)> Comp;    
-    typedef function<void(T)> Proc; //add     
-    Nodos<T>* raiz;
+    typedef function<int(T, T)> Comp;
+    typedef function<void(T)> Proc;
+    NodoArbol<T>* raiz;
     Proc procesar;
     Comp comparar;
 private:
-    bool _buscar(Nodos<T>* Nodos, T e) {
-        if (Nodos == nullptr) return false;
+    bool _buscar(NodoArbol<T>* nodo, T e) {
+        if (nodo == nullptr) return false;
         else {
-            int r = comparar(Nodos->elemento, e);
+            int r = comparar(nodo->elemento, e);
             if (r == 0) return true;
             else if (r < 0) {
-                return _buscar(Nodos->der, e);
+                return _buscar(nodo->der, e);
             }
             else {
-                return _buscar(Nodos->izq, e);
+                return _buscar(nodo->izq, e);
             }
         }
     }
-    Nodos<T>* _obtener(Nodos<T>* Nodos, T e) {
-        if (Nodos == nullptr) return nullptr;
+    NodoArbol<T>* _obtener(NodoArbol<T>* nodo, T e) {
+        if (nodo == nullptr) return nullptr;
         else {
-            int r = comparar(Nodos->elemento, e);
-            if (r == 0) return Nodos;
+            int r = comparar(nodo->elemento, e);
+            if (r == 0) return nodo;
             else if (r < 0) {
-                return _obtener(Nodos->der, e);
+                return _obtener(nodo->der, e);
             }
             else {
-                return _obtener(Nodos->izq, e);
+                return _obtener(nodo->izq, e);
             }
         }
     }
-    bool _insertar(Nodos<T>*& Nodos, T e) {
-        if (Nodos == nullptr) {
-            Nodos = new Nodos<T>();
-            Nodos->elemento = e;
-            Nodos->izq = Nodos->der = nullptr;
+    bool _insertar(NodoArbol<T>*& nodo, T e) {
+        if (nodo == nullptr) {
+            nodo = new NodoArbol<T>();
+            nodo->elemento = e;
+            nodo->izq = nodo->der = nullptr;
             return true;
         }
         else {
-            int r = comparar(Nodos->elemento, e);
+            int r = comparar(nodo->elemento, e);
             if (r == 0) return false;
             else if (r < 0) {
-                return _insertar(Nodos->der, e);
+                return _insertar(nodo->der, e);
             }
             else {
-                return _insertar(Nodos->izq, e);
+                return _insertar(nodo->izq, e);
             }
         }
     }
-    void _enOrden(Nodos<T>* Nodos) {
-        if (Nodos == nullptr) return;
-        _enOrden(Nodos->izq);
-        if (procesar) procesar(Nodos->elemento);
-        _enOrden(Nodos->der);
+    void _enOrden(NodoArbol<T>* nodo) {
+        if (nodo == nullptr) return;
+        _enOrden(nodo->izq);
+        if (procesar) procesar(nodo->elemento);
+        _enOrden(nodo->der);
     }
-    void _preOrden(Nodos<T>* Nodos) {
-        if (Nodos == nullptr) return;
-        if (procesar) procesar(Nodos->elemento);
-        _preOrden(Nodos->izq);
-        _preOrden(Nodos->der);
+    void _preOrden(NodoArbol<T>* nodo) {
+        if (nodo == nullptr) return;
+        if (procesar) procesar(nodo->elemento);
+        _preOrden(nodo->izq);
+        _preOrden(nodo->der);
     }
-    void _postOrden(Nodos<T>* Nodos) {
-        if (Nodos == nullptr) return;
-        _postOrden(Nodos->izq);
-        _postOrden(Nodos->der);
-        if (procesar) procesar(Nodos->elemento);
+    void _postOrden(NodoArbol<T>* nodo) {
+        if (nodo == nullptr) return;
+        _postOrden(nodo->izq);
+        _postOrden(nodo->der);
+        if (procesar) procesar(nodo->elemento);
     }
     bool _vacio() {
         return raiz == nullptr;
     }
-    int _cantidad(Nodos<T>* Nodos) {
-        if (Nodos == nullptr)
+    int _cantidad(NodoArbol<T>* nodo) {
+        if (nodo == nullptr)
             return 0;
         else
         {
             int ci, cd;
-            ci = _cantidad(Nodos->izq);
-            cd = _cantidad(Nodos->der);
+            ci = _cantidad(nodo->izq);
+            cd = _cantidad(nodo->der);
             return 1 + ci + cd;
         }
     }
-    int _altura(Nodos<T>* Nodos) {
-        if (Nodos == nullptr)
+    int _altura(NodoArbol<T>* nodo) {
+        if (nodo == nullptr)
             return 0;
         else
         {
             int ai, ad;
-            ai = 1 + _altura(Nodos->izq);
-            ad = 1 + _altura(Nodos->der);
+            ai = 1 + _altura(nodo->izq);
+            ad = 1 + _altura(nodo->der);
             return ai > ad ? ai : ad;
         }
     }
-    T _minimo(Nodos<T>* Nodos) {
-        if (Nodos->izq == nullptr) return Nodos->elemento;
+    T _minimo(NodoArbol<T>* nodo) {
+        if (nodo->izq == nullptr) return nodo->elemento;
         else
-            return _minimo(Nodos->izq);
+            return _minimo(nodo->izq);
     }
-    T _maximo(Nodos<T>* Nodos) {
-        if (Nodos->der == nullptr) return Nodos->elemento;
+    T _maximo(NodoArbol<T>* nodo) {
+        if (nodo->der == nullptr) return nodo->elemento;
         else
-            return _maximo(Nodos->der);
+            return _maximo(nodo->der);
     }
-    bool _eliminar(Nodos<T>*& Nodos, T e) {
-        if (Nodos == nullptr) return false;
+    bool _eliminar(NodoArbol<T>*& nodo, T e) {
+        if (nodo == nullptr) return false;
         else {
-            int r = comparar(Nodos->elemento, e);
+            int r = comparar(nodo->elemento, e);
             if (r < 0) {
-                return _eliminar(Nodos->der, e);
+                return _eliminar(nodo->der, e);
             }
             else if (r > 0) {
-                return _eliminar(Nodos->izq, e);
+                return _eliminar(nodo->izq, e);
             }
             else {
-                if (Nodos->der == nullptr && Nodos->izq == nullptr) {
-                    delete Nodos;
-                    Nodos = nullptr;
+                if (nodo->der == nullptr && nodo->izq == nullptr) {
+                    delete nodo;
+                    nodo = nullptr;
                     return true;
                 }
-                else if (Nodos->izq == nullptr) {
-                    Nodos<T>* temp = Nodos;
-                    Nodos = Nodos->der;
+                else if (nodo->izq == nullptr) {
+                    NodoArbol<T>* temp = nodo;
+                    nodo = nodo->der;
                     delete temp;
                     return true;
                 }
-                else if (Nodos->der == nullptr) {
-                    Nodos<T>* temp = Nodos;
-                    Nodos = Nodos->izq;
+                else if (nodo->der == nullptr) {
+                    NodoArbol<T>* temp = nodo;
+                    nodo = nodo->izq;
                     delete temp;
                     return true;
                 }
                 else {
-                    Nodos<T>* aux = Nodos->der;
+                    NodoArbol<T>* aux = nodo->der;
                     while (aux->izq != nullptr)
                     {
                         aux = aux->izq;
                     }
-                    Nodos->elemento = aux->elemento;
-                    return _eliminar(Nodos->der, aux->elemento);
+                    nodo->elemento = aux->elemento;
+                    return _eliminar(nodo->der, aux->elemento);
                 }
             }
         }
     }
-    int _suma_total(Nodos<T>* Nodos) {
-        if (Nodos == nullptr)
+    int _suma_total(NodoArbol<T>* nodo) {
+        if (nodo == nullptr)
             return 0;
         else
         {
             int ci = 0, cd = 0;
-            ci = _suma_total(Nodos->izq);
-            cd = _suma_total(Nodos->der);
-            return Nodos->elemento + cd + ci;
+            ci = _suma_total(nodo->izq);
+            cd = _suma_total(nodo->der);
+            return nodo->elemento + cd + ci;
         }
     }
 
@@ -224,12 +223,3 @@ public:
         return _suma_total(raiz);
     }
 };
-
-//void imprimir(int e) {
-//std::cout << " " << e;
-//}
-//
-//int main() {
-//	//srand(time(0));
-//	ArbolB<int>* arbol = new ArbolB<int>(imprimir);
-//}
