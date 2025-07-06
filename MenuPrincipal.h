@@ -29,12 +29,12 @@ void MenuPrincipal::iniciar() {
 
     do {
         if (primeraVez) {
-            configurarConsola();  
+            configurarConsola();
             primeraVez = false;
         }
 
-        mostrarInterfaz();  
-        mostrarMenu();      
+        mostrarInterfaz();
+        mostrarMenu();
 
         CONSOLE_CURSOR_INFO cursorInfo;
         cursorInfo.dwSize = 100;
