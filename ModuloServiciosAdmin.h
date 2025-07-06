@@ -5,10 +5,14 @@
 #include "Administrador.h"
 #include <iostream>
 #include <functional>
+#include "Cliente.h"
 using namespace std;
 
 class ModuloServiciosAdmin {
 private:
+
+    ArbolB<Cliente*>* arbolClientes;
+
     DescuentoPromocion descuentos[5] = {
         DescuentoPromocion(1, "Descuento Verano", 15.0f, true),
         DescuentoPromocion(2, "Black Friday", 30.0f, false),
@@ -400,8 +404,21 @@ private:
             }
         } while (opcion != 0);
     }
+    void menuClientes() {
+        cout << "\n=== CLIENTES REGISTRADOS (PREORDEN) ===\n";
+        if (arbolClientes) {
+            arbolClientes->preOrden();
+        }
+        else {
+            cout << "No hay clientes registrados.\n";
+        }
+        pausar();
+    }
 
 public:
+    ModuloServiciosAdmin(ArbolB<Cliente*>* arbolClientes)
+        : arbolClientes(arbolClientes)
+    {}
     void ejecutar() {
         int opcion;
         do {
@@ -409,6 +426,7 @@ public:
             cout << "1. Gestion de Descuentos y Promociones\n";
             cout << "2. Analisis de Rese" << char(164) << "as de Eventos\n";
             cout << "3. Administracion de Usuarios\n";
+			cout << "4. Mostrar Clientes Registrados\n";
             cout << "0. Volver al menu principal\n";
             cout << "Seleccione una opcion: ";
             cin >> opcion;
@@ -426,7 +444,9 @@ public:
             case 3:
                 menuAdministradores();
                 system("cls");
-
+                break;
+            case 4:
+                menuClientes();
                 break;
             case 0:
                 cout << "Volviendo al menu principal...\n";
