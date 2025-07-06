@@ -22,9 +22,10 @@ void MenuPrincipal::mostrarMensaje(string mensaje) {
 
 void MenuPrincipal::iniciar() {
     int opcion;
+    ArbolB<Cliente*> arbolClientes(imprimirNombre, compararCliente);
     ModuloEventos moduloEventos;
-    ModuloServiciosAdmin moduloServiciosAdmin;
-    ModuloCompra moduloCompra(moduloEventos.getGestorEventosPtr());
+    ModuloServiciosAdmin moduloServiciosAdmin(&arbolClientes);
+    ModuloCompra moduloCompra(moduloEventos.getGestorEventosPtr(), &arbolClientes);
     bool primeraVez = true;
 
     do {
