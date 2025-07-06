@@ -23,6 +23,7 @@ public:
     bool historialVacio() const;
     Evento* buscarPorId(int id);
     ~GestorEventos();
+
 };
 Lista<Evento*>& GestorEventos::getEventos() {
     return eventos;
