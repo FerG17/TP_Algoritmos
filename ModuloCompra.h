@@ -1,278 +1,210 @@
 #pragma once
 #include <iostream>
-#include <string>
-#include <conio.h> 
-#include "Compra.h"
-#include "Cliente.h"
-#include "Entrada.h"
-#include "ModuloUtils.h" 
-#include "ArbolB.h"
-using namespace std;
+#include "GestorEventos.h"
+#include "Concierto.h"
+#include "Lugar.h"
+#include "ObraTeatral.h"
+#include "Deporte.h"
+#include "Festival.h"
+#include "Lista.h"
+#include "Evento.h"
+#include "Lugar.h"
+#include "ModuloUtils.h"
 
-void imprimirNombre(Cliente* c) {
-    std::cout << c->getNombre() << std::endl;
-}
-
-int compararCliente(Cliente* a, Cliente* b) {
-    return a->getId() - b->getId();
-}
-
-class ModuloCompra {
+class ModuloEventos {
 private:
-    Cliente cliente;
-    Compra compra;
-    GestorEventos* gestorEventos;
-    ArbolB<Cliente*>* arbolClientes;
-
-    //ANALISIS 6
-
-    void registrarCliente() {
-        int id;
-        string nombre, apellido, email, telefono, direccion;
-
-        limpiarYCentrarPantalla();
-        mostrarTituloModulo("REGISTRO DE CLIENTE");
-
-        int y = 18;//1
-
-        gotoxy(45, y++);
-        cout << "Ingrese ID (DNI): ";//1
-        cin >> id;//1
-        cin.ignore();
-
-        gotoxy(45, y++);//1
-        cout << "Nombre: ";//1
-        getline(cin, nombre);//1
-
-        gotoxy(45, y++);//1
-        cout << "Apellido: ";//1
-        getline(cin, apellido);//1
-
-        gotoxy(45, y++);//1
-        cout << "Email: ";//1
-        getline(cin, email);//1
-
-        while (!cliente.validarEmail(email)) {//n
-            setColor(ROJO_CLARO, COLOR_FONDO);
-            gotoxy(45, y++);//1
-            cout << "Email invalido. Ingrese un correo valido: ";//1
-            setColor(COLOR_TEXTO, COLOR_FONDO);
-            getline(cin, email);//1
-        }
-
-        gotoxy(45, y++);//1
-        cout << "Telefono: ";//1
-        getline(cin, telefono);//1
-
-        gotoxy(45, y++);//1
-        cout << "Direccion: ";//1
-        getline(cin, direccion);//1
-
-        cliente = Cliente(id, nombre, apellido, email, telefono, direccion);//1
-        Cliente* nuevoCliente = new Cliente(id, nombre, apellido, email, telefono, direccion);
-        arbolClientes->insertar(nuevoCliente);
-        ofstream archivoClientes("clientes.txt", ios::app);
-        if (archivoClientes.is_open()) {//1
-            cliente.guardarEnArchivo(archivoClientes);
-            archivoClientes.close();
-        }
-        else {//1
-            gotoxy(45, y++);//1
-            setColor(ROJO_CLARO, COLOR_FONDO);
-            cout << "Error al guardar cliente en archivo.";//1
-            setColor(COLOR_TEXTO, COLOR_FONDO);
-        }
-
-        gotoxy(45, y + 1);//1
-        setColor(VERDE_CLARO, COLOR_FONDO);
-        cout << "Cliente registrado exitosamente.";//1
-        setColor(COLOR_TEXTO, COLOR_FONDO);
-        
-        Sleep(1500);
-    } //n+28 = O(n)
-
-    void agregarEvento() {
-        limpiarYCentrarPantalla();
-        mostrarTituloModulo("SELECCIONAR EVENTO");
-
-        int y = 20;
-        auto& eventos = gestorEventos->getEventos();
-        if (eventos.tamaño() == 0) {
-            gotoxy(45, y++); cout << "No hay eventos disponibles.";
-            pausarContinuar();
-            return;
-        }
-        for (size_t i = 0; i < eventos.tamaño(); ++i) {
-            gotoxy(45, y++);
-            cout << i + 1 << ". ";
-            eventos.obtener(i)->mostrar();
-        }
-        int seleccion;
-        gotoxy(45, y + 1); cout << "Seleccione el evento (numero): ";
-        cin >> seleccion;
-
-        if (seleccion < 1 || seleccion > eventos.tamaño()) {
-            gotoxy(45, y + 3); cout << "Opcion invalida.";
-            pausarContinuar();
-            return;
-        }
-
-        Evento* eventoSeleccionado = eventos.obtener(seleccion - 1);
-
-        gotoxy(45, y + 4); cout << "Precio del evento: S/. " << eventoSeleccionado->getPrecio();
-
-        int asientoId;
-        gotoxy(45, y + 5); cout << "Ingrese ID del asiento: ";
-        cin >> asientoId;
-        Entrada entrada(eventoSeleccionado->getId(), asientoId, eventoSeleccionado->getPrecio());
-        compra.agregarEntrada(entrada);
-        cliente.sumarPuntos(20);
-
-        gotoxy(45, y + 6);
-        setColor(VERDE_CLARO, COLOR_FONDO);
-        cout << "Evento agregado a la compra. Puntos actuales: " << cliente.getPuntosLealtad();
-        setColor(COLOR_TEXTO, COLOR_FONDO);
-
-        Sleep(1500);
-    }
-
-    void mostrarCompra() {
-        limpiarYCentrarPantalla();
-        mostrarTituloModulo("RESUMEN DE COMPRA");
-        int y = 18;
-        if (compra.getCantidadEntradas() == 0) {
-            gotoxy(45, y++);
-            setColor(ROJO_CLARO, COLOR_FONDO);
-            cout << "No hay eventos registrados en la compra.";
-            setColor(COLOR_TEXTO, COLOR_FONDO);
-            Sleep(1500);
-            return;
-        }
-        compra.getEntradas().ordenarQuick([](const Entrada& a, const Entrada& b) {
-            return a.getPrecio() < b.getPrecio();
-            });
-        gotoxy(45, y);
-        compra.mostrarResumen();
-        pausarContinuar();
-    }
-
-
-    void consultarPrecios() {
-        limpiarYCentrarPantalla();
-        mostrarTituloModulo("CONSULTA DE PRECIOS");
-
-        int y = 18;
-
-        gotoxy(45, y++);
-        cout << "Subtotal sin descuento: S/. " << compra.calcularSubtotal();
-
-        gotoxy(45, y++);
-        cout << "Total con descuento aplicado: S/. " << compra.calcularTotal();
-
-        pausarContinuar();
-    }
-
-    void mostrarPuntos() {
-        limpiarYCentrarPantalla();
-        mostrarTituloModulo("PUNTOS DE LEALTAD");
-
-        int y = 18;
-
-        int puntos = cliente.getPuntosLealtad();
-
-        gotoxy(45, y++);
-        cout << "Puntos de lealtad acumulados: " << puntos;
-
-        gotoxy(45, y++);
-        cout << "Descuento disponible: " << (puntos / 20) * 5 << "%";
-
-        pausarContinuar();
-    }
+    Lugar lugar;
+    GestorEventos gestor;
 
 public:
+    ModuloEventos() : lugar("Estadio Nacional") {}
+    void cargarEventosDeEjemplo() {
+        Evento* e1 = new Concierto(1, "RockFest", "2025-06-10", 150, "Los Riffs");
+        Evento* e2 = new Concierto(2, "MetalVibe", "2025-07-01", 200, "Iron Scream");
+        Evento* e3 = new ObraTeatral(3, "Hamlet", "2025-08-15", 90, "Juan Perez", 120);
+        Evento* e4 = new Festival(4, "Book Fest", "2025-06-07", 50, 2, "Libros");
+        Evento* e5 = new Deporte(5, "El Clasico", "2025-08-12", 70, "Universitario", "Alianza Lima");
+        gestor.agregarEvento(e1);
+        gestor.agregarEvento(e2);
+        gestor.agregarEvento(e3);
+        gestor.agregarEvento(e4);
+        gestor.agregarEvento(e5);
 
-    ModuloCompra(GestorEventos* gestor, ArbolB<Cliente*>* arbolClientes)
-        : gestorEventos(gestor), arbolClientes(arbolClientes) {
     }
-
-    ArbolB<Cliente*>* getArbolClientes() { return arbolClientes; }
-
     void ejecutar() {
-        int opcion;
-        registrarCliente();
+        cargarEventosDeEjemplo();
 
+        int opcion;
+        int opcionA;
         do {
             limpiarYCentrarPantalla();
-            mostrarTituloModulo("MODULO COMPRA");
+            mostrarTituloModulo("MODULO EVENTOS");
 
-            int y = 18;
+            int y = 50;
+            gotoxy(45, y++); cout << "1. Ver todos los eventos";
+            gotoxy(45, y++); cout << "2. Buscar por mes (MM)";
+            gotoxy(45, y++); cout << "3. Mostrar historial";
+            gotoxy(45, y++); cout << "4. Ver eventos y asientos del lugar";
+            gotoxy(45, y++); cout << "5. Ver asientos en orden inverso";
+            gotoxy(45, y++); cout << "6. Ver eventos ordenados por precio"; 
+            gotoxy(45, y++); cout << "7. Buscar evento por ID (HashTable)";
+            gotoxy(45, y++); cout << "0. Volver al menu principal";
+            gotoxy(45, y++); cout << "Opcion: ";
+            gotoxy(53, y - 1); cin >> opcion;
 
-            gotoxy(45, y++);
-            cout << "1. Registrarse en evento";
-
-            gotoxy(45, y++);
-            cout << "2. Mostrar compra";
-
-            gotoxy(45, y++);
-            cout << "3. Consultar precios";
-
-            gotoxy(45, y++);
-            cout << "4. Ver puntos de lealtad";
-
-            gotoxy(45, y++);
-            cout << "5. Ver detalles del cliente";
-
-            gotoxy(45, y++);
-            cout << "6. Imprimir entradas compradas";
-
-            gotoxy(45, y++);
-            cout << "0. Volver al menu principal";
-
-            gotoxy(45, y + 2);
-            cout << "Seleccione una opcion: ";
-            cin >> opcion;
+            system("cls");
 
             switch (opcion) {
             case 1:
-                agregarEvento();
-                break;
-            case 2:
-                mostrarCompra();
-                break;
-            case 3:
-                consultarPrecios();
-                break;
-            case 4:
-                mostrarPuntos();
-                break;
-            case 5:
                 limpiarYCentrarPantalla();
-                cliente.mostrarDetalles();
+                gestor.mostrarEventos();
                 pausarContinuar();
                 break;
-            case 6:
+
+            case 2: {
                 limpiarYCentrarPantalla();
-                compra.getEntradas().ordenarQuick([](const Entrada& a, const Entrada& b) {
-                    return a.getPrecio() < b.getPrecio();
-                    });
-                for (size_t i = 0; i < compra.getCantidadEntradas(); i++) {
-                    Entrada e = compra.getEntradas().obtener(i);
-                    e.imprimirEntrada();
+                gotoxy(45, 30); cout << "Ingrese mes (ej: 06): ";
+                string mes;
+                cin >> mes;
+                Evento* e = gestor.buscarPorMes(mes);
+                limpiarYCentrarPantalla();
+                if (e) {
+                    gotoxy(45, 30); cout << "Evento encontrado:";
+                    gotoxy(45, 31); e->mostrar();
+                    gestor.historialPush(e);
+                }
+                else {
+                    gotoxy(45, 30); cout << "No se encontro evento para ese mes.";
                 }
                 pausarContinuar();
                 break;
-            case 0:
-                gotoxy(45, y + 4);
-                cout << "Volviendo al menu principal...";
-                Sleep(1000);
-                break;
-            default:
-                gotoxy(45, y + 4);
-                setColor(ROJO_CLARO, COLOR_FONDO);
-                cout << "Opcion invalida. Intente nuevamente.";
-                setColor(COLOR_TEXTO, COLOR_FONDO);
-                Sleep(1500);
             }
+
+            case 3:
+                limpiarYCentrarPantalla();
+                gestor.historialPop();
+                pausarContinuar();
+                break;
+
+            case 4: {
+                limpiarYCentrarPantalla();
+                gotoxy(45, 28); cout << "EVENTOS DISPONIBLES";
+                for (size_t i = 0; i < gestor.getEventos().tamaño(); ++i) {
+                    gotoxy(45, 30 + i);
+                    cout << i + 1 << ". ";
+                    gestor.getEventos().obtener(i)->mostrar();
+                }
+
+                int seleccion;
+                gotoxy(45, 40); cout << "Seleccione un evento: ";
+                cin >> seleccion;
+                if (seleccion < 1 || seleccion > gestor.getEventos().tamaño()) {
+                    gotoxy(45, 42); cout << "Opcion invalida.";
+                    pausarContinuar();
+                    break;
+                }
+
+                Evento* evento = gestor.getEventos().obtener(seleccion - 1);
+                limpiarYCentrarPantalla();
+                gotoxy(45, 30); cout << "ASIENTOS PARA: " << evento->getNombre();
+                gotoxy(45, 32); cout << "1. Principal";
+                gotoxy(45, 33); cout << "2. VIP";
+                gotoxy(45, 34); cout << "3. GOLD";
+                gotoxy(45, 35); cout << "Seleccione una opcion: ";
+                cin >> opcionA;
+                system("cls");
+
+                switch (opcionA) {
+                case 1: evento->getSeccion()->mostrarAsientos(); break;
+                case 2: evento->getSeccionGeneral()->mostrarAsientos(); break;
+                case 3: evento->getSeccionVIP()->mostrarAsientos(); break;
+                default:
+                    gotoxy(45, 30); cout << "Opcion invalida.";
+                }
+                pausarContinuar();
+                break;
+            }
+
+            case 5: {
+                limpiarYCentrarPantalla();
+                gotoxy(45, 28); cout << "EVENTOS DISPONIBLES";
+                for (size_t i = 0; i < gestor.getEventos().tamaño(); ++i) {
+                    gotoxy(45, 30 + i);
+                    cout << i + 1 << ". ";
+                    gestor.getEventos().obtener(i)->mostrar();
+                }
+
+                int seleccion;
+                gotoxy(45, 40); cout << "Seleccione un evento: ";
+                cin >> seleccion;
+                if (seleccion < 1 || seleccion > gestor.getEventos().tamaño()) {
+                    gotoxy(45, 42); cout << "Opcion invalida.";
+                    pausarContinuar();
+                    break;
+                }
+
+                Evento* evento = gestor.getEventos().obtener(seleccion - 1);
+                limpiarYCentrarPantalla();
+                gotoxy(45, 30); cout << "ASIENTOS PARA: " << evento->getNombre();
+                gotoxy(45, 32); cout << "1. Principal";
+                gotoxy(45, 33); cout << "2. VIP";
+                gotoxy(45, 34); cout << "3. GOLD";
+                gotoxy(45, 35); cout << "Seleccione una opcion: ";
+                cin >> opcionA;
+                system("cls");
+
+                switch (opcionA) {
+                case 1: evento->getSeccion()->mostrarAsientosInverso(); break;
+                case 2: evento->getSeccionGeneral()->mostrarAsientosInverso(); break;
+                case 3: evento->getSeccionVIP()->mostrarAsientosInverso(); break;
+                default:
+                    gotoxy(45, 30); cout << "Opcion invalida.";
+                }
+                pausarContinuar();
+                break;
+            }
+            case 6: {
+                limpiarYCentrarPantalla();
+                gotoxy(45, 28); cout << "EVENTOS ORDENADOS POR PRECIO";
+                gestor.getEventos().ordenarMerge([](Evento* a, Evento* b) {
+                    return a->getPrecio() < b->getPrecio();
+                    });
+                int y2 = 30;
+                gestor.getEventos().forEach([&y2](Evento* e) {
+                    gotoxy(45, y2++);
+                    e->mostrar();
+                    });
+                pausarContinuar();
+                break;
+            }
+            case 7: {
+                limpiarYCentrarPantalla();
+                int idBuscado;
+                gotoxy(45, 30); cout << "Ingrese el ID del evento a buscar: ";
+                cin >> idBuscado;
+                Evento* e = gestor.buscarPorId(idBuscado);
+                limpiarYCentrarPantalla();
+                if (e) {
+                    gotoxy(45, 30); cout << "Evento encontrado por ID:";
+                    gotoxy(45, 31); e->mostrar();
+                    gestor.historialPush(e);
+                }
+                else {
+                    gotoxy(45, 30); cout << "No se encontro ningun evento con ese ID.";
+                }
+                pausarContinuar();
+                break;
+            }
+            case 0:
+                gotoxy(45, 30); cout << "Saliendo del modulo eventos...";
+                break;
+
+            default:
+                gotoxy(45, 30); cout << "Opcion invalida.";
+                pausarContinuar();
+            }
+
         } while (opcion != 0);
     }
+    GestorEventos* getGestorEventosPtr() { return &gestor; }
 };
