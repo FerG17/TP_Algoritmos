@@ -6,6 +6,7 @@
 #include <ctime>
 #include "Persona.h"
 #include "Lista.h"
+#include "ArbolB.h" //add
 
 class Compra;
 
@@ -141,6 +142,7 @@ public:
         }
         return cliente;
     }
+
     //RECURSIVIDAD
     void mostrarDetalles(int nivel = 0) const {
         if (nivel == 0) {
