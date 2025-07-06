@@ -9,13 +9,12 @@
 #include "ArbolB.h"
 using namespace std;
 
-int compararCliente(Cliente* a, Cliente* b) {
-    if (a->getId() < b->getId()) return -1;
-    if (a->getId() > b->getId()) return 1;
-    return 0;
-}
 void imprimirNombre(Cliente* c) {
-    cout << c->getNombre() << endl;
+    std::cout << c->getNombre() << std::endl;
+}
+
+int compararCliente(Cliente* a, Cliente* b) {
+    return a->getId() - b->getId();
 }
 
 class ModuloCompra {
@@ -23,7 +22,7 @@ private:
     Cliente cliente;
     Compra compra;
     GestorEventos* gestorEventos;
-    ArbolB<Cliente*> arbolClientes;
+    ArbolB<Cliente*>* arbolClientes;
 
     //ANALISIS 6
 
@@ -71,8 +70,7 @@ private:
 
         cliente = Cliente(id, nombre, apellido, email, telefono, direccion);//1
         Cliente* nuevoCliente = new Cliente(id, nombre, apellido, email, telefono, direccion);
-        arbolClientes.insertar(nuevoCliente);
-
+        arbolClientes->insertar(nuevoCliente);
         ofstream archivoClientes("clientes.txt", ios::app);
         if (archivoClientes.is_open()) {//1
             cliente.guardarEnArchivo(archivoClientes);
@@ -89,7 +87,7 @@ private:
         setColor(VERDE_CLARO, COLOR_FONDO);
         cout << "Cliente registrado exitosamente.";//1
         setColor(COLOR_TEXTO, COLOR_FONDO);
-
+        
         Sleep(1500);
     } //n+28 = O(n)
 
@@ -193,11 +191,11 @@ private:
 
 public:
 
-    ModuloCompra(GestorEventos* gestor)
-        : gestorEventos(gestor),
-        arbolClientes(imprimirNombre, compararCliente) {} //agregado el arbol a modulo compra para agregar
+    ModuloCompra(GestorEventos* gestor, ArbolB<Cliente*>* arbolClientes)
+        : gestorEventos(gestor), arbolClientes(arbolClientes) {
+    }
 
-    ArbolB<Cliente*>* getArbolClientes() { return &arbolClientes; }
+    ArbolB<Cliente*>* getArbolClientes() { return arbolClientes; }
 
     void ejecutar() {
         int opcion;
