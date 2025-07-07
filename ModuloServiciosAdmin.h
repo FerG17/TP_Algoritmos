@@ -1,18 +1,17 @@
 #pragma once
-#pragma once
 #include "DescuentoPromocion.h"
 #include "ReseñaEvento.h"
 #include "Administrador.h"
 #include <iostream>
 #include <functional>
 #include "Cliente.h"
+#include "GeneradorDataSet.h"
 using namespace std;
 
 class ModuloServiciosAdmin {
 private:
-
     ArbolB<Cliente*>* arbolClientes;
-
+    const GeneradorDataSet* dataset;
     DescuentoPromocion descuentos[5] = {
         DescuentoPromocion(1, "Descuento Verano", 15.0f, true),
         DescuentoPromocion(2, "Black Friday", 30.0f, false),
@@ -403,7 +402,29 @@ private:
                 pausar();
             }
         } while (opcion != 0);
+
+    }void menuClientesHash() {
+        if (!dataset) {
+            cout << "No hay dataset cargado.\n";
+            pausar();
+            return;
+        }
+        cout << "\n=== RELACION CLIENTES - INDICE HASH ===\n";
+        const auto& clientes = dataset->getClientesGenerados();
+        const auto& hashTabla = dataset->getHashTablaClientes();
+
+        cout << "DNI\t\tIndice en tabla hash\n";
+        cout << "--------------------------\n";
+        int mostrarCantidad = min(10, (int)clientes.size());
+        for (int i = 0; i < mostrarCantidad; ++i) {
+            const Cliente* c = clientes[i];
+            int idx = hashTabla.buscar(c->getId());
+            cout << c->getId() << "\t" << idx << endl;
+        }
+        cout << "(Solo se muestran los primeros 10 clientes)\n";
+        pausar();
     }
+
     void menuClientes() {
         cout << "\n=== CLIENTES REGISTRADOS (PREORDEN) ===\n";
         if (arbolClientes) {
@@ -416,9 +437,9 @@ private:
     }
 
 public:
-    ModuloServiciosAdmin(ArbolB<Cliente*>* arbolClientes)
-        : arbolClientes(arbolClientes)
-    {}
+    ModuloServiciosAdmin(ArbolB<Cliente*>* arbolClientes, const GeneradorDataSet* dataset)
+        : arbolClientes(arbolClientes), dataset(dataset) {
+    }
     void ejecutar() {
         int opcion;
         do {
@@ -427,6 +448,7 @@ public:
             cout << "2. Analisis de Rese" << char(164) << "as de Eventos\n";
             cout << "3. Administracion de Usuarios\n";
 			cout << "4. Mostrar Clientes Registrados\n";
+            cout << "5. Mostrar Clientes y su indice en Hash\n";
             cout << "0. Volver al menu principal\n";
             cout << "Seleccione una opcion: ";
             cin >> opcion;
@@ -447,6 +469,9 @@ public:
                 break;
             case 4:
                 menuClientes();
+                break;
+            case 5:
+                menuClientesHash();
                 break;
             case 0:
                 cout << "Volviendo al menu principal...\n";
