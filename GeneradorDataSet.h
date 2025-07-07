@@ -7,9 +7,11 @@
 #include <set>
 #include <sstream>
 #include <iomanip>
+#include <limits>
 #include "Cliente.h"
 #include "Compra.h"
 #include "Entrada.h"
+#include "Hash.h"
 
 using namespace std;
 
@@ -22,7 +24,7 @@ static vector<string> metodosPago = { "Tarjeta", "Efectivo", "Yape", "Plin" };
 
 class GeneradorDataSet {
 public:
-    GeneradorDataSet() {}
+    GeneradorDataSet(int hashTableSize = 128) : hashTablaClientes(hashTableSize) {}
 
     ~GeneradorDataSet() {
         limpiarMemoria();
@@ -31,6 +33,7 @@ public:
     // Genera y almacena clientes y compras aleatorias; los guarda también en archivos .txt
     void generarDatasetClientes(int cantidadClientes, const string& archivoClientes, const string& archivoCompras) {
         limpiarMemoria();
+        hashTablaClientes = HashTabla(hashTablaClientes.size()); // reset hash table
 
         ofstream outClientes(archivoClientes);
         ofstream outCompras(archivoCompras);
@@ -46,6 +49,7 @@ public:
         for (int i = 0; i < cantidadClientes; ++i) {
             Cliente* c = generarClienteAleatorio(gen, dnisUsados, comprasTemp);
             clientesGenerados.push_back(c);
+            hashTablaClientes.insertar(c->getId(), i); // Relacionar DNI con índice
             c->guardarEnArchivo(outClientes);
         }
         // Copiar las compras a la variable global de la clase
@@ -63,10 +67,12 @@ public:
     // Acceso a los datos generados en memoria
     const vector<Cliente*>& getClientesGenerados() const { return clientesGenerados; }
     const vector<Compra*>& getComprasGeneradas() const { return comprasGeneradas; }
+    const HashTabla& getHashTablaClientes() const { return hashTablaClientes; }
 
 private:
     vector<Cliente*> clientesGenerados;
     vector<Compra*> comprasGeneradas;
+    HashTabla hashTablaClientes;
 
     void limpiarMemoria() {
         for (Cliente* c : clientesGenerados) delete c;
@@ -161,7 +167,7 @@ private:
 
         Cliente* cliente = new Cliente(dni, nombre, apellido, email, telefono, direccion);
         cliente->setPuntosLealtad(uniform_int_distribution<>(0, 500)(gen));
-        int numCompras = uniform_int_distribution<>(1, 5)(gen);
+        int numCompras = uniform_int_distribution<>(2, 4)(gen); 
         for (int i = 0; i < numCompras; ++i) {
             Compra* compra = generarCompraAleatoria(cliente->getId(), gen);
             comprasGeneradasLocal.push_back(compra);
