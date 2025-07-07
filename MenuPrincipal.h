@@ -9,6 +9,7 @@
 #include <windows.h>
 #include <fstream>
 #include <limits>
+#include "GeneradorDataSet.h"
 
 using namespace std;
 
@@ -82,8 +83,9 @@ void MenuPrincipal::mostrarEjemplosGenerados() {
 void MenuPrincipal::iniciar() {
     int opcion;
     ArbolB<Cliente*> arbolClientes(imprimirNombre, compararCliente);
+    GeneradorDataSet generadorDataSet;
     ModuloEventos moduloEventos;
-    ModuloServiciosAdmin moduloServiciosAdmin(&arbolClientes);
+    ModuloServiciosAdmin moduloServiciosAdmin(&arbolClientes, &generadorDataSet);
     ModuloCompra moduloCompra(moduloEventos.getGestorEventosPtr(), &arbolClientes);
     bool primeraVez = true;
 
@@ -133,4 +135,3 @@ void MenuPrincipal::iniciar() {
 
     } while (opcion != 0);
 }
-
